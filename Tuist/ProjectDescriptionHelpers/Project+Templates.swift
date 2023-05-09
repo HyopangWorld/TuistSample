@@ -16,9 +16,12 @@ public extension Project {
         let settings: Settings = .settings(
             base: [:],
             configurations: [
-                .debug(name: .debug),
-                .release(name: .release)
-            ], defaultSettings: .recommended)
+                .debug(name: .dev, xcconfig: .relativeToRoot("XCConfig/App/dev.xcconfig")),
+                .debug(name: .stage, xcconfig: .relativeToRoot("XCConfig/App/stage.xcconfig")),
+                .release(name: .prod, xcconfig: .relativeToRoot("XCConfig/App/prod.xcconfig"))
+            ],
+            defaultSettings: .recommended
+        )
 
         let appTarget = Target(
             name: name,
@@ -44,7 +47,11 @@ public extension Project {
             dependencies: [.target(name: name)]
         )
 
-        let schemes: [Scheme] = [.makeScheme(target: .debug, name: name)]
+        let schemes: [Scheme] = [
+            .makeScheme(target: .dev, name: name),
+            .makeScheme(target: .stage, name: name),
+            .makeScheme(target: .prod, name: name)
+        ]
 
         let targets: [Target] = [appTarget, testTarget]
 
@@ -62,7 +69,7 @@ public extension Project {
 extension Scheme {
     static func makeScheme(target: ConfigurationName, name: String) -> Scheme {
         return Scheme(
-            name: name,
+            name: "\(name)(\(target.rawValue))",
             shared: true,
             buildAction: .buildAction(targets: ["\(name)"]),
             testAction: .targets(
