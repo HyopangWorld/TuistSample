@@ -12,13 +12,11 @@ let project = Project.makeModule(
     name: "ThirdPartyLib",
     product: .framework,
     packages: [
-        .remote(
-            url: "https://github.com/ReactiveX/RxSwift.git",
-            requirement: .upToNextMajor(from: "6.5.0")
-        )
+        .Rx
     ],
     dependencies: [
-        .package(product: "RxSwift"),
-        .package(product: "RxCocoa")
+        .SPM.RxSwift,
+        .SPM.RxCocoa,
+        .SPM.RxRelay
     ]
 )
