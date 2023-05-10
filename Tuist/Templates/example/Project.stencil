@@ -1,0 +1,9 @@
+{# project.stencil #}
+
+import ProjectDescription
+import ProjectDescriptionHelpers
+
+let project = Project.makeModule(
+    name: "{{ name }}",
+    product: .staticLibrary
+)
